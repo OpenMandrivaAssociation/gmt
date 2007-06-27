@@ -24,6 +24,7 @@ Source7: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_share.tar.bz2
 Source8: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_coast.tar.bz2
 Source9: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_high.tar.bz2
 Source10: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_full.tar.bz2
+Patch1: gmt-4.2.0-overflow.patch
 URL: http://gmt.soest.hawaii.edu/
 BuildRoot: %_tmppath/%name-%version-root
 BuildRequires: netcdf-devel >= 3.4
@@ -119,8 +120,12 @@ This package contains development files from gmt.
 
 %prep
 %setup -q -n GMT%{version} -b 0 -b 1 -b 2 -b 3 -b 4 -b 5 -b 6 -b 7 -a 8 -a 9 -a 10
+%patch1 -p0 -b .overflow
 
 %build
+# -fstack-protector make build failing
+%define _ssp_cflags %{nil}
+
 # workaround else if try to build mex, which need matlab
 ./configure
 
