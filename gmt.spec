@@ -1,7 +1,9 @@
-%define release %mkrel 3
-%define version 4.1.3
+%define release %mkrel 1
+%define major_ver 4.2
+%define minor_ver 0
+%define version %{major_ver}.%{minor_ver}
 
-%define requirever 4.1.3
+%define requirever %version
 
 %define libname %mklibname %name
 
@@ -19,9 +21,9 @@ Source4: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_pdf.tar.bz2
 Source5: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_web.tar.bz2
 Source6: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_tut.tar.bz2
 Source7: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_share.tar.bz2
-Source8: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT4.1_coast.tar.bz2
-Source9: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT4.1_high.tar.bz2
-Source10: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT4.1_full.tar.bz2
+Source8: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_coast.tar.bz2
+Source9: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_high.tar.bz2
+Source10: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_full.tar.bz2
 URL: http://gmt.soest.hawaii.edu/
 BuildRoot: %_tmppath/%name-%version-root
 BuildRequires: netcdf-devel >= 3.4
@@ -161,124 +163,8 @@ EOF
 
 %files
 %defattr(-,root,root)
-%{_bindir}/blockmean
-%{_bindir}/blockmedian
-%{_bindir}/blockmode
-%{_bindir}/filter1d
-%{_bindir}/fitcircle
-%{_bindir}/grdfilter
-%{_bindir}/gmt2rgb
-%{_bindir}/gmtconvert
-%{_bindir}/gmtdefaults
-%{_bindir}/gmtmath
-%{_bindir}/gmtselect
-%{_bindir}/gmtset
-%{_bindir}/grd2cpt
-%{_bindir}/grd2xyz
-%{_bindir}/grdcontour
-%{_bindir}/grdblend
-%{_bindir}/grdcut
-%{_bindir}/grdclip
-%{_bindir}/grdedit
-%{_bindir}/grdfft
-%{_bindir}/grdgradient
-%{_bindir}/grdhisteq
-%{_bindir}/grdimage
-%{_bindir}/grdinfo
-%{_bindir}/grdlandmask
-%{_bindir}/grdmask
-%{_bindir}/grdtrack
-%{_bindir}/grdreformat
-%{_bindir}/grdmath
-%{_bindir}/grdpaste
-%{_bindir}/grdproject
-#%{_bindir}/grdrotater
-%{_bindir}/grdsample
-%{_bindir}/grdtrend
-%{_bindir}/grdvector
-%{_bindir}/grdview
-%{_bindir}/grdvolume
-%{_bindir}/makecpt
-%{_bindir}/mapproject
-#%{_bindir}/mgd77info
-#%{_bindir}/mgd77list
-#%{_bindir}/mgd77path
-#%{_bindir}/mgd77sniffer
-#%{_bindir}/mgd77track
-%{_bindir}/minmax
-%{_bindir}/nearneighbor
-%{_bindir}/project
-%{_bindir}/psbasemap
-%{_bindir}/psclip
-%{_bindir}/pscoast
-%{_bindir}/pshistogram
-%{_bindir}/psimage
-%{_bindir}/pslegend
-%{_bindir}/psmask
-%{_bindir}/psrose
-%{_bindir}/psscale
-%{_bindir}/pstext
-%{_bindir}/pscontour
-%{_bindir}/pswiggle
-%{_bindir}/psxy
-%{_bindir}/psxyz
-#%{_bindir}/rotconverter
-%{_bindir}/sample1d
-#%{_bindir}/segy2grd
-%{_bindir}/spectrum1d
-%{_bindir}/splitxyz
-%{_bindir}/surface
-%{_bindir}/trend1d
-%{_bindir}/trend2d
-%{_bindir}/triangulate
-#%{_bindir}/x2sys_binlist
-#%{_bindir}/x2sys_get
-#%{_bindir}/x2sys_init
-#%{_bindir}/x2sys_put
-%{_bindir}/xyz2grd
-%{_bindir}/GMT
-#%{_bindir}/grdraster
-#%{_bindir}/gshhs
-#%{_bindir}/gshhs_dp
-#%{_bindir}/img2mercgrd
-#%{_bindir}/img2grd
-#%{_bindir}/psmeca
-#%{_bindir}/pscoupe
-#%{_bindir}/pspolar
-#%{_bindir}/psvelo
-#%{_bindir}/binlegs
-#%{_bindir}/gmt2bin
-#%{_bindir}/gmt2dat
-#%{_bindir}/dat2gmt
-#%{_bindir}/gmtinfo
-#%{_bindir}/gmtlegs
-#%{_bindir}/gmtlist
-#%{_bindir}/gmtpath
-#%{_bindir}/gmttrack
-#%{_bindir}/mgd77convert
-#%{_bindir}/mgd77togmt
-#%{_bindir}/mgd77manage
-#%{_bindir}/psmegaplot
-#%{_bindir}/makepattern
-#%{_bindir}/nc2xy
-#%{_bindir}/pssegyz
-#%{_bindir}/pssegy
-#%{_bindir}/ps2raster
-#%{_bindir}/backtracker
-#%{_bindir}/hotspotter
-#%{_bindir}/originator
-#%{_bindir}/x2sys_datalist
-#%{_bindir}/x2sys_cross
-#%{_bindir}/xgridedit
-#%{_bindir}/x_edit
-#%{_bindir}/x_init
-#%{_bindir}/x_list
-#%{_bindir}/x_over
-#%{_bindir}/x_report
-#%{_bindir}/x_remove
-#%{_bindir}/x_setup
-#%{_bindir}/x_solve_dc_drift
-#%{_bindir}/x_update
+%{_bindir}/*
+
 %dir %{_datadir}/gmt-%{version}/share
 %{_datadir}/gmt-%{version}/share/GMT_CustomSymbols.lis
 #%{_datadir}/gmt-%{version}/share/dbase/grdraster.info
@@ -454,13 +340,22 @@ EOF
 %{_datadir}/gmt-%{version}/share/pattern/ps_pattern_88.ras
 %{_datadir}/gmt-%{version}/share/pattern/ps_pattern_89.ras
 %{_datadir}/gmt-%{version}/share/pattern/ps_pattern_90.ras
-#%{_datadir}/gmt-%{version}/share/x2sys/gmt.def
-#%{_datadir}/gmt-%{version}/share/x2sys/mgd77.def
-#%{_datadir}/gmt-%{version}/share/x2sys/xy.def
-#%{_datadir}/gmt-%{version}/share/x2sys/xyz.def
-#%{_datadir}/gmt-%{version}/share/x2sys/geo.def
-#%{_datadir}/gmt-%{version}/share/x2sys/geoz.def
-#%{_datadir}/gmt-%{version}/share/x2sys/mgd77+.def
+%dir %{_datadir}/gmt-%{version}/share/x2sys
+%{_datadir}/gmt-%{version}/share/x2sys/gmt.def
+%{_datadir}/gmt-%{version}/share/x2sys/mgd77.def
+%{_datadir}/gmt-%{version}/share/x2sys/xy.def
+%{_datadir}/gmt-%{version}/share/x2sys/xyz.def
+%{_datadir}/gmt-%{version}/share/x2sys/geo.def
+%{_datadir}/gmt-%{version}/share/x2sys/geoz.def
+%{_datadir}/gmt-%{version}/share/x2sys/mgd77+.def
+%dir %{_datadir}/x2sys
+%{_datadir}/x2sys/gmt.def
+%{_datadir}/x2sys/mgd77.def
+%{_datadir}/x2sys/xy.def
+%{_datadir}/x2sys/xyz.def
+%{_datadir}/x2sys/geo.def
+%{_datadir}/x2sys/geoz.def
+%{_datadir}/x2sys/mgd77+.def
 %dir %{_datadir}/gmt-%{version}/share/custom
 %{_datadir}/gmt-%{version}/share/custom/astroid.def
 %{_datadir}/gmt-%{version}/share/custom/circle.def
@@ -539,52 +434,8 @@ EOF
 
 %files -n %libname-devel
 %defattr(-,root,root)
-#%{_libdir}/libgmt_mgg.a
-#%{_libdir}/libx2sys.a
-%{_libdir}/libpsl.a
-%{_libdir}/libgmt.a
-#%{_libdir}/libmgd77.a
-%{_libdir}/libgmtps.a
-%{_includedir}/gmt.h
-%{_includedir}/gmt_math.h
-%{_includedir}/gmt_nan.h
-%{_includedir}/gmt_map.h
-%{_includedir}/gmt_boundcond.h
-%{_includedir}/gmt_shore.h
-%{_includedir}/gmt_project.h
-%{_includedir}/gmt_grd.h
-#%{_includedir}/gmt_funcnames.h
-%{_includedir}/gmt_colors.h
-%{_includedir}/gmt_grdio.h
-%{_includedir}/gmt_customio.h
-%{_includedir}/gmt_bcr.h
-%{_includedir}/gmt_unique.h
-%{_includedir}/gmt_keywords.h
-%{_includedir}/gmt_io.h
-%{_includedir}/gmt_notposix.h
-%{_includedir}/gmt_calclock.h
-%{_includedir}/gmt_contour.h
-%{_includedir}/gmt_mgg_header2.h
-%{_includedir}/gmt_symbol.h
-%{_includedir}/gmt_notunix.h
-%{_includedir}/gmt_time_systems.h
-%{_includedir}/pslib.h
-%{_includedir}/gmt_datums.h
-%{_includedir}/gmt_ellipsoids.h
-%{_includedir}/gmt_grdformats.h
-%{_includedir}/gmt_version.h
-%{_includedir}/gmt_common.h
-%{_includedir}/gmt_init.h
-%{_includedir}/gmt_keycases.h
-%{_includedir}/gmt_plot.h
-%{_includedir}/gmt_proj.h
-%{_includedir}/gmt_stat.h
-%{_includedir}/gmt_support.h
-%{_includedir}/gmt_synopsis.h
-%{_includedir}/gmt_vector.h
-#%{_includedir}/mgd77.h
-#%{_includedir}/mgd77defaults.h
-%{_includedir}/pslib_inc.h
+%{_libdir}/*.a
+%{_includedir}/*.h
 
 %clean
 [ %buildroot != '/' ] && rm -fr %buildroot
