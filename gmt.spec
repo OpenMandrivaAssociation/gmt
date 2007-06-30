@@ -1,4 +1,4 @@
-%define release %mkrel 1
+%define release %mkrel 2
 %define major_ver 4.2
 %define minor_ver 0
 %define version %{major_ver}.%{minor_ver}
@@ -135,7 +135,7 @@ This package contains development files from gmt.
 	--enable-shared \
 	--enable-mansect=1 \
         --disable-mex \
-	--datadir=%{_datadir}/%{name}-%{version}/share/coast \
+	--datadir=%{_datadir}/%{name}-%{version}/share \
 
 # mex need matlab # TODO add a --with matlab
 touch src/mex/.skip
