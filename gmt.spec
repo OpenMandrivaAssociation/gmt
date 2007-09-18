@@ -1,4 +1,4 @@
-%define release %mkrel 2
+%define release %mkrel 3
 %define major_ver 4.2
 %define minor_ver 0
 %define version %{major_ver}.%{minor_ver}
