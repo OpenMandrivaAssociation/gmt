@@ -26,7 +26,6 @@ Source9: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_high.tar.bz2
 Source10: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_full.tar.bz2
 Patch1: gmt-4.2.0-overflow.patch
 URL: http://gmt.soest.hawaii.edu/
-BuildRoot: %_tmppath/%name-%version-root
 BuildRequires: netcdf-devel >= 3.4
 BuildRequires: X11-devel
 Requires: gmt-coast = %version-%release
@@ -36,19 +35,16 @@ Summary:        GMT cartography data crude, low and intermediate resolution
 Group:          Sciences/Geosciences
 Requires:       %{name} >= %requirever
 Conflicts:      gmt-data < %version
-BuildRoot:      %{_tmppath}/%{name}-%{version}
 
 %package 	highdata
 Summary:	GMT cartography data High-Resolution
 Group:		Sciences/Geosciences
 Requires: 	%{name} >= %requirever
-BuildRoot:  %{_tmppath}/%{name}-%{version}
 
 %package 	fulldata
 Summary:	GMT cartography data Full-Resolution (maximum)
 Group:		Sciences/Geosciences
 Requires: 	%{name} >= %requirever
-BuildRoot:  %{_tmppath}/%{name}-%{version}
 
 %package        doc
 Summary:        GMT HTML and PDF Documentation
