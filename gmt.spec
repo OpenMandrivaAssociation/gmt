@@ -1,6 +1,6 @@
-%define release %mkrel 3
+%define release %mkrel 1
 %define major_ver 4.2
-%define minor_ver 0
+%define minor_ver 1
 %define version %{major_ver}.%{minor_ver}
 
 %define requirever %version
@@ -16,7 +16,6 @@ Group: Sciences/Geosciences
 Source0: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_src.tar.bz2
 Source1: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_scripts.tar.bz2
 Source2: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_suppl.tar.bz2
-Source3: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_man.tar.bz2
 Source4: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_pdf.tar.bz2
 Source5: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_web.tar.bz2
 Source6: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_tut.tar.bz2
@@ -25,6 +24,7 @@ Source8: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_coast.tar.bz2
 Source9: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_high.tar.bz2
 Source10: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_full.tar.bz2
 Patch1: gmt-4.2.0-overflow.patch
+Patch2: gmt-netcdf-location.patch
 URL: http://gmt.soest.hawaii.edu/
 BuildRequires: netcdf-devel >= 3.4
 BuildRequires: X11-devel
@@ -115,8 +115,9 @@ and political boundaries. This is High resolution data version.
 This package contains development files from gmt.
 
 %prep
-%setup -q -n GMT%{version} -b 0 -b 1 -b 2 -b 3 -b 4 -b 5 -b 6 -b 7 -a 8 -a 9 -a 10
+%setup -q -n GMT%{version} -b 0 -b 1 -b 2 -b 4 -b 5 -b 6 -b 7 -a 8 -a 9 -a 10
 %patch1 -p0 -b .overflow
+%patch2 -p0 -b .netcdf-location
 
 %build
 # -fstack-protector make build failing
@@ -130,7 +131,7 @@ This package contains development files from gmt.
 	--libdir=%_libdir \
 	--enable-shared \
 	--enable-mansect=1 \
-        --disable-mex \
+    --disable-mex \
 	--datadir=%{_datadir}/%{name}-%{version}/share \
 
 # mex need matlab # TODO add a --with matlab
@@ -167,16 +168,16 @@ EOF
 %{_bindir}/*
 
 %dir %{_datadir}/gmt-%{version}/share
-%{_datadir}/gmt-%{version}/share/GMT_CustomSymbols.lis
-#%{_datadir}/gmt-%{version}/share/dbase/grdraster.info
-%{_datadir}/gmt-%{version}/share/.gmtdefaults_SI
-%{_datadir}/gmt-%{version}/share/.gmtdefaults_US
-%{_datadir}/gmt-%{version}/share/gmt.conf
+%{_datadir}/gmt-%{version}/share/conf/.gmtdefaults_SI
+%{_datadir}/gmt-%{version}/share/conf/.gmtdefaults_US
+%{_datadir}/gmt-%{version}/share/conf/gmt.conf
+%{_datadir}/gmt-%{version}/share/conf/gmt_cpt.conf
+%{_datadir}/gmt-%{version}/share/conf/gmt_custom_media.conf
+%{_datadir}/gmt-%{version}/share/conf/gmt_custom_symbols.conf
+%{_datadir}/gmt-%{version}/share/conf/gmt_formats.conf
 %{_datadir}/gmt-%{version}/share/cpt/GMT_drywet.cpt
 %{_datadir}/gmt-%{version}/share/cpt/GMT_cool.cpt
 %{_datadir}/gmt-%{version}/share/cpt/GMT_copper.cpt
-%{_datadir}/gmt-%{version}/share/GMT_CPT.lis
-%{_datadir}/gmt-%{version}/share/gmtformats.d
 %{_datadir}/gmt-%{version}/share/time/br.d
 %{_datadir}/gmt-%{version}/share/time/cn1.d
 %{_datadir}/gmt-%{version}/share/time/cn2.d
@@ -210,7 +211,7 @@ EOF
 %{_datadir}/gmt-%{version}/share/cpt/GMT_haxby.cpt
 %{_datadir}/gmt-%{version}/share/cpt/GMT_hot.cpt
 %{_datadir}/gmt-%{version}/share/cpt/GMT_jet.cpt
-%{_datadir}/gmt-%{version}/share/gmtmedia.d
+#%{_datadir}/gmt-%{version}/share/gmtmedia.d
 %{_datadir}/gmt-%{version}/share/cpt/GMT_no_green.cpt
 %{_datadir}/gmt-%{version}/share/cpt/GMT_ocean.cpt
 %{_datadir}/gmt-%{version}/share/cpt/GMT_polar.cpt
@@ -222,6 +223,8 @@ EOF
 %{_datadir}/gmt-%{version}/share/cpt/GMT_split.cpt
 %{_datadir}/gmt-%{version}/share/cpt/GMT_topo.cpt
 %{_datadir}/gmt-%{version}/share/cpt/GMT_wysiwyg.cpt
+%{_datadir}/gmt-%{version}/share/cpt/GMT_cyclic.cpt
+%{_datadir}/gmt-%{version}/share/cpt/GMT_panoply.cpt
 
 %{_datadir}/gmt-%{version}/share/dbase
 
@@ -394,6 +397,7 @@ EOF
 %{_datadir}/gmt-%{version}/share/custom/vneedle.def
 %{_datadir}/gmt-%{version}/share/custom/volcano.def
 %{_mandir}/man1/*
+%{_mandir}/man3/*
 %attr(0755, root, root) %{_sysconfdir}/profile.d/*
 
 %files coast
@@ -425,7 +429,7 @@ EOF
 
 %files doc
 %defattr(-,root,root)
-%doc README CHANGES COPYING tutorial examples www/gmt/* 
+%doc README COPYING tutorial examples www/gmt/* 
 
 %files -n %libname
 %defattr(-,root,root)
