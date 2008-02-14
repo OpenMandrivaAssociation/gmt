@@ -13,6 +13,7 @@ Version: %{version}
 Release: %{release}
 License: GPL 
 Group: Sciences/Geosciences
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Source0: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_src.tar.bz2
 Source1: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_scripts.tar.bz2
 Source2: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_suppl.tar.bz2
