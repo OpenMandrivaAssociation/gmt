@@ -1,5 +1,5 @@
 %define release %mkrel 1
-%define major_ver 4.2
+%define major_ver 4.3
 %define minor_ver 1
 %define version %{major_ver}.%{minor_ver}
 
@@ -21,9 +21,9 @@ Source4: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_pdf.tar.bz2
 Source5: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_web.tar.bz2
 Source6: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_tut.tar.bz2
 Source7: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_share.tar.bz2
-Source8: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_coast.tar.bz2
-Source9: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_high.tar.bz2
-Source10: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_full.tar.bz2
+#Source8: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_coast.tar.bz2
+#Source9: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_high.tar.bz2
+#Source10: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{major_ver}_full.tar.bz2
 Patch1: gmt-4.2.0-overflow.patch
 Patch2: gmt-netcdf-location.patch
 URL: http://gmt.soest.hawaii.edu/
@@ -31,6 +31,7 @@ BuildRequires: netcdf-devel >= 3.4
 BuildRequires: X11-devel
 Requires: gmt-coast = %version-%release
 
+%if 0
 %package        coast
 Summary:        GMT cartography data crude, low and intermediate resolution
 Group:          Sciences/Geosciences
@@ -46,6 +47,7 @@ Requires: 	%{name} >= %requirever
 Summary:	GMT cartography data Full-Resolution (maximum)
 Group:		Sciences/Geosciences
 Requires: 	%{name} >= %requirever
+%endif
 
 %package        doc
 Summary:        GMT HTML and PDF Documentation
@@ -77,6 +79,7 @@ GMT is developed and maintained by Paul Wessel and Walter H. F. Smith.
 
 GMT is partly supported by the National Science Foundation. 
 
+%if 0
 %description coast 
 GMT is a free, open source collection of mapping tools and cartography
 GMT supports 25 common map projections plus linear, log, and power scaling,
@@ -95,6 +98,7 @@ GMT is a free, open source collection of mapping tools and cartography
 GMT supports 25 common map projections plus linear, log, and power scaling,
 and comes with support data such as coastlines, rivers, 
 and political boundaries. This is maximum resolution data version
+%endif
 
 %description doc
 HTML, PDF documentation and examples for GMT.
@@ -116,7 +120,8 @@ and political boundaries. This is High resolution data version.
 This package contains development files from gmt.
 
 %prep
-%setup -q -n GMT%{version} -b 0 -b 1 -b 2 -b 4 -b 5 -b 6 -b 7 -a 8 -a 9 -a 10
+%setup -q -n GMT%{version} -b 0 -b 1 -b 2 -b 4 -b 5 -b 6 -b 7
+##-a 8 -a 9 -a 10
 %patch1 -p0 -b .overflow
 %patch2 -p0 -b .netcdf-location
 
@@ -169,13 +174,10 @@ EOF
 %{_bindir}/*
 
 %dir %{_datadir}/gmt-%{version}/share
-%{_datadir}/gmt-%{version}/share/conf/.gmtdefaults_SI
-%{_datadir}/gmt-%{version}/share/conf/.gmtdefaults_US
 %{_datadir}/gmt-%{version}/share/conf/gmt.conf
 %{_datadir}/gmt-%{version}/share/conf/gmt_cpt.conf
 %{_datadir}/gmt-%{version}/share/conf/gmt_custom_media.conf
 %{_datadir}/gmt-%{version}/share/conf/gmt_custom_symbols.conf
-%{_datadir}/gmt-%{version}/share/conf/gmt_formats.conf
 %{_datadir}/gmt-%{version}/share/cpt/GMT_drywet.cpt
 %{_datadir}/gmt-%{version}/share/cpt/GMT_cool.cpt
 %{_datadir}/gmt-%{version}/share/cpt/GMT_copper.cpt
@@ -353,14 +355,10 @@ EOF
 %{_datadir}/gmt-%{version}/share/x2sys/geo.def
 %{_datadir}/gmt-%{version}/share/x2sys/geoz.def
 %{_datadir}/gmt-%{version}/share/x2sys/mgd77+.def
-%dir %{_datadir}/x2sys
-%{_datadir}/x2sys/gmt.def
-%{_datadir}/x2sys/mgd77.def
-%{_datadir}/x2sys/xy.def
-%{_datadir}/x2sys/xyz.def
-%{_datadir}/x2sys/geo.def
-%{_datadir}/x2sys/geoz.def
-%{_datadir}/x2sys/mgd77+.def
+%{_datadir}/gmt-%{version}/share/conf/gmtdefaults_SI
+%{_datadir}/gmt-%{version}/share/conf/gmtdefaults_US
+%{_datadir}/gmt-%{version}/share/custom/hurricane.def
+
 %dir %{_datadir}/gmt-%{version}/share/custom
 %{_datadir}/gmt-%{version}/share/custom/astroid.def
 %{_datadir}/gmt-%{version}/share/custom/circle.def
@@ -399,8 +397,10 @@ EOF
 %{_datadir}/gmt-%{version}/share/custom/volcano.def
 %{_mandir}/man1/*
 %{_mandir}/man3/*
+%{_mandir}/man5/*
 %attr(0755, root, root) %{_sysconfdir}/profile.d/*
 
+%if 0
 %files coast
 %defattr(-,root,root)
 %dir %{_datadir}/gmt-%{version}/share/coast
@@ -427,6 +427,7 @@ EOF
 %{_datadir}/gmt-%{version}/share/coast/binned_border_f.cdf
 %{_datadir}/gmt-%{version}/share/coast/binned_GSHHS_f.cdf
 %{_datadir}/gmt-%{version}/share/coast/binned_river_f.cdf
+%endif
 
 %files doc
 %defattr(-,root,root)
@@ -434,14 +435,21 @@ EOF
 
 %files -n %libname
 %defattr(-,root,root)
-%{_libdir}/libpsl.so
-%{_libdir}/libgmt.so
-%{_libdir}/libgmtps.so
+%{_libdir}/libgmt.so.4
+%{_libdir}/libgmtps.so.4
+%{_libdir}/libmgd77.so
+%{_libdir}/libmgd77.so.4
+%{_libdir}/libpsl.so.4
+%{_libdir}/libx2sys.so
+%{_libdir}/libx2sys.so.4
 
 %files -n %libname-devel
 %defattr(-,root,root)
 %{_libdir}/*.a
 %{_includedir}/*.h
+%{_libdir}/libpsl.so
+%{_libdir}/libgmt.so
+%{_libdir}/libgmtps.so
 
 %clean
 [ %buildroot != '/' ] && rm -fr %buildroot
