@@ -8,7 +8,7 @@
 %define dataepoch 1
 %define dataevr %{dataepoch}:%{dataversion}-%{release}
 
-%define requirever %version
+%define requirever %gmtversion
 
 %define libname %mklibname %name
 
@@ -40,7 +40,7 @@ Requires: gmt-coast = %dataevr
 Summary:        GMT cartography data crude, low and intermediate resolution
 Group:          Sciences/Geosciences
 Requires:       %{name} >= %requirever
-Conflicts:      gmt-data < %version
+Conflicts:      gmt-data < %gmtversion
 Version:        %{dataversion}
 Epoch:          %{dataepoch}
 
@@ -65,14 +65,14 @@ Group:          Books/Other
 %package -n %libname
 Summary:	Library from GMT
 Group:		System/Libraries
-Provides:	lib%name = %version-%release
+Provides:	lib%name = %gmtversion-%release
 
 %package -n %libname-devel
 Summary:	Library from GMT
 Group:		Development/Other
-Provides:	lib%name-devel = %version-%release
-Provides:	%name-devel = %version-%release
-Requires:	%libname = %version-%release
+Provides:	lib%name-devel = %gmtversion-%release
+Provides:	%name-devel = %gmtversion-%release
+Requires:	%libname = %gmtversion-%release
 
 %description
 GMT is a free, open source collection of ~60 UNIX tools that allow users to 
