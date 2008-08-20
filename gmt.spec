@@ -40,7 +40,7 @@ Requires: gmt-coast = %dataevr
 Summary:        GMT cartography data crude, low and intermediate resolution
 Group:          Sciences/Geosciences
 Requires:       %{name} >= %requirever
-Conflicts:      gmt-data < %gmtversion
+Obsoletes:      gmt-data
 Version:        %{dataversion}
 Epoch:          %{dataepoch}
 
