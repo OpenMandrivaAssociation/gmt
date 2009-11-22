@@ -1,10 +1,10 @@
-%define release %mkrel 4
-%define major_ver 4.3
+%define release %mkrel 1
+%define major_ver 4.5
 %define minor_ver 1
 %define gmtversion %{major_ver}.%{minor_ver}
 %define version %{gmtversion}
 
-%define dataversion 1.10
+%define dataversion 2.0.1
 %define dataepoch 1
 %define dataevr %{dataepoch}:%{dataversion}-%{release}
 
@@ -20,17 +20,12 @@ License: GPL
 Group: Sciences/Geosciences
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Source0: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_src.tar.bz2
-Source1: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_scripts.tar.bz2
 Source2: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_suppl.tar.bz2
-Source4: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_pdf.tar.bz2
-Source5: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_web.tar.bz2
-Source6: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_tut.tar.bz2
 Source7: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_share.tar.bz2
 Source8: ftp://gmt.soest.hawaii.edu/pub/gmt/GSHHS%{dataversion}_coast.tar.bz2
 Source9: ftp://gmt.soest.hawaii.edu/pub/gmt/GSHHS%{dataversion}_high.tar.bz2
 Source10: ftp://gmt.soest.hawaii.edu/pub/gmt/GSHHS%{dataversion}_full.tar.bz2
 Patch1: gmt-4.2.0-overflow.patch
-Patch2: gmt-netcdf-location.patch
 URL: http://gmt.soest.hawaii.edu/
 BuildRequires: netcdf-devel >= 3.4
 BuildRequires: X11-devel
@@ -127,9 +122,8 @@ and political boundaries. This is High resolution data version.
 This package contains development files from gmt.
 
 %prep
-%setup -q -n GMT%{gmtversion} -b 0 -b 1 -b 2 -b 4 -b 5 -b 6 -b 7 -a 8 -a 9 -a 10
+%setup -q -n GMT%{gmtversion} -b 0 -b 2 -b 7 -a 8 -a 9 -a 10
 %patch1 -p0 -b .overflow
-%patch2 -p0 -b .netcdf-location
 
 %build
 # -fstack-protector make build failing
@@ -170,6 +164,8 @@ cat > %buildroot/%_sysconfdir/profile.d/%name.csh <<EOF
 setenv GMTHOME %{_datadir}/gmt-%{gmtversion}
 
 EOF
+
+rm -fr %buildroot/usr/share/doc/gmt-doc
 
 %if %mdkversion < 200900
 %post -n %libname -p /sbin/ldconfig
@@ -243,7 +239,6 @@ EOF
 
 %{_datadir}/gmt-%{gmtversion}/share/mgg/carter.d
 %{_datadir}/gmt-%{gmtversion}/share/mgg/gmtfile_paths
-%{_datadir}/gmt-%{gmtversion}/share/mgd77/mgd77_paths.txt
 %dir %{_datadir}/gmt-%{gmtversion}/share/pslib
 %{_datadir}/gmt-%{gmtversion}/share/pslib/PSL_text.ps
 %{_datadir}/gmt-%{gmtversion}/share/pslib/ISO-8859-1.ps
@@ -367,44 +362,10 @@ EOF
 %{_datadir}/gmt-%{gmtversion}/share/x2sys/mgd77+.def
 %{_datadir}/gmt-%{gmtversion}/share/conf/gmtdefaults_SI
 %{_datadir}/gmt-%{gmtversion}/share/conf/gmtdefaults_US
-%{_datadir}/gmt-%{gmtversion}/share/custom/hurricane.def
+%{_datadir}/gmt-%{gmtversion}/share/mgd77
 
 %dir %{_datadir}/gmt-%{gmtversion}/share/custom
-%{_datadir}/gmt-%{gmtversion}/share/custom/astroid.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/circle.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/crosshair.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/cross.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/diamond.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/deltoid.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/flash.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/hexagon.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/hlens.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/hlozenge.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/hneedle.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/invtriangle.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/lcrescent.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/lflag.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/ltriangle.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/meca.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/octagon.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/pacman.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/pentagon.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/rcrescent.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/rflag.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/rtriangle.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/sectoid.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/square.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/squaroid.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/star.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/star3.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/star4.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/starp.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/sun.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/triangle.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/vlens.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/vlozenge.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/vneedle.def
-%{_datadir}/gmt-%{gmtversion}/share/custom/volcano.def
+%{_datadir}/gmt-%{gmtversion}/share/custom/*.def
 %{_mandir}/man1/*
 %{_mandir}/man3/*
 %{_mandir}/man5/*
@@ -437,10 +398,6 @@ EOF
 %{_datadir}/gmt-%{gmtversion}/share/coast/binned_GSHHS_f.cdf
 %{_datadir}/gmt-%{gmtversion}/share/coast/binned_river_f.cdf
 
-%files doc
-%defattr(-,root,root)
-%doc README COPYING tutorial examples www/gmt/* 
-
 %files -n %libname
 %defattr(-,root,root)
 %{_libdir}/libgmt.so.4
@@ -450,6 +407,7 @@ EOF
 %{_libdir}/libpsl.so.4
 %{_libdir}/libx2sys.so
 %{_libdir}/libx2sys.so.4
+%{_libdir}/libgmt_mgg.so.4
 
 %files -n %libname-devel
 %defattr(-,root,root)
@@ -458,6 +416,7 @@ EOF
 %{_libdir}/libpsl.so
 %{_libdir}/libgmt.so
 %{_libdir}/libgmtps.so
+%{_libdir}/libgmt_mgg.so
 
 %clean
 [ %buildroot != '/' ] && rm -fr %buildroot
