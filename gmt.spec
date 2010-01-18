@@ -1,8 +1,6 @@
-%define release %mkrel 3
-%define major_ver 4.5
-%define minor_ver 1
-%define gmtversion %{major_ver}.%{minor_ver}
-%define version %{gmtversion}
+%define release %mkrel 4
+%define major 4
+%define gmtversion 4.5.1
 
 %define dataversion 2.0.1
 %define dataepoch 1
@@ -10,11 +8,12 @@
 
 %define requirever %gmtversion
 
-%define libname %mklibname %name
+%define libname %mklibname %name %{major}
+%define develname %mklibname %name -d
 
 Summary: Scientific graphic tool with maps
 Name: gmt
-Version: %{version}
+Version: %{gmtversion}
 Release: %{release}
 License: GPL 
 Group: Sciences/Geosciences
@@ -62,11 +61,12 @@ Epoch:          %{dataepoch}
 Summary:	Library from GMT
 Group:		System/Libraries
 Provides:	lib%name = %gmtversion-%release
+Obsoletes:	%{_lib}%{name}
 
-%package -n %libname-devel
+%package -n %develname
 Summary:	Library from GMT
 Group:		Development/Other
-Provides:	lib%name-devel = %gmtversion-%release
+Provides:	lib%{name}-devel = %gmtversion-%release
 Provides:	%name-devel = %gmtversion-%release
 Requires:	%libname = %gmtversion-%release
 
@@ -114,7 +114,7 @@ and political boundaries. This is High resolution data version.
 
 This package contains library from gmt.
 
-%description -n %libname-devel
+%description -n %develname
 GMT is a free, open source collection of mapping tools and cartography
 GMT supports 25 common map projections plus linear, log, and power scaling,
 and comes with support data such as coastlines, rivers, 
@@ -406,23 +406,13 @@ rm -fr %buildroot/usr/share/doc/gmt-doc
 
 %files -n %libname
 %defattr(-,root,root)
-%{_libdir}/libgmt.so.4
-%{_libdir}/libgmtps.so.4
-%{_libdir}/libmgd77.so
-%{_libdir}/libmgd77.so.4
-%{_libdir}/libpsl.so.4
-%{_libdir}/libx2sys.so
-%{_libdir}/libx2sys.so.4
-%{_libdir}/libgmt_mgg.so.4
+%{_libdir}/*.so.%{major}
 
-%files -n %libname-devel
+%files -n %develname
 %defattr(-,root,root)
 %{_libdir}/*.a
 %{_includedir}/*.h
-%{_libdir}/libpsl.so
-%{_libdir}/libgmt.so
-%{_libdir}/libgmtps.so
-%{_libdir}/libgmt_mgg.so
+%{_libdir}/*.so
 
 %clean
 [ %buildroot != '/' ] && rm -fr %buildroot
