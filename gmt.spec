@@ -1,4 +1,4 @@
-%define release %mkrel 2
+%define release %mkrel 3
 %define major_ver 4.5
 %define minor_ver 1
 %define gmtversion %{major_ver}.%{minor_ver}
@@ -54,9 +54,9 @@ Requires: 	%{name} >= %requirever
 Version:        %{dataversion}
 Epoch:          %{dataepoch}
 
-%package        doc
-Summary:        GMT HTML and PDF Documentation
-Group:          Books/Other
+#%package        doc
+#Summary:        GMT HTML and PDF Documentation
+#Group:          Books/Other
 
 %package -n %libname
 Summary:	Library from GMT
@@ -103,8 +103,8 @@ GMT supports 25 common map projections plus linear, log, and power scaling,
 and comes with support data such as coastlines, rivers, 
 and political boundaries. This is maximum resolution data version
 
-%description doc
-HTML, PDF documentation and examples for GMT.
+#%description doc
+#HTML, PDF documentation and examples for GMT.
 
 %description -n %libname
 GMT is a free, open source collection of mapping tools and cartography
