@@ -1,4 +1,4 @@
-%define release %mkrel 1
+%define release %mkrel 2
 %define major_ver 4.5
 %define minor_ver 1
 %define gmtversion %{major_ver}.%{minor_ver}
@@ -25,6 +25,7 @@ Source7: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_share.tar.bz2
 Source8: ftp://gmt.soest.hawaii.edu/pub/gmt/GSHHS%{dataversion}_coast.tar.bz2
 Source9: ftp://gmt.soest.hawaii.edu/pub/gmt/GSHHS%{dataversion}_high.tar.bz2
 Source10: ftp://gmt.soest.hawaii.edu/pub/gmt/GSHHS%{dataversion}_full.tar.bz2
+Patch0:	gmt-4.5.1-as-needed.patch
 Patch1: gmt-4.2.0-overflow.patch
 URL: http://gmt.soest.hawaii.edu/
 BuildRequires: netcdf-devel >= 3.4
@@ -123,27 +124,33 @@ This package contains development files from gmt.
 
 %prep
 %setup -q -n GMT%{gmtversion} -b 0 -b 2 -b 7 -a 8 -a 9 -a 10
+%patch0 -p0 -b .as-needed
 %patch1 -p0 -b .overflow
 
 %build
 # -fstack-protector make build failing
 %define _ssp_cflags %{nil}
 
-# workaround else if try to build mex, which need matlab
-./configure
+# needed by p0
+aclocal
+autoconf
 
-./configure \
+# workaround else if try to build mex, which need matlab
+
+%configure2_5x
+
+%configure2_5x \
 	--prefix=%_prefix \
 	--libdir=%_libdir \
 	--enable-shared \
 	--enable-mansect=1 \
-    --disable-mex \
+	--disable-mex \
 	--datadir=%{_datadir}/%{name}-%{gmtversion}/share \
 
 # mex need matlab # TODO add a --with matlab
 touch src/mex/.skip
 
-make GMT_DEFAULT_PATH=%_datadir/gmt-%{gmtversion} CC_OPT="%optflags -fPIC" 
+%make GMT_DEFAULT_PATH=%_datadir/gmt-%{gmtversion} CC_OPT="%optflags -fPIC" 
 
 %install
 %makeinstall install
