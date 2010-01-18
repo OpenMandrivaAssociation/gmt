@@ -132,7 +132,6 @@ This package contains development files from gmt.
 %define _ssp_cflags %{nil}
 
 # needed by p0
-aclocal
 autoconf
 
 # workaround else if try to build mex, which need matlab
@@ -145,12 +144,12 @@ autoconf
 	--enable-shared \
 	--enable-mansect=1 \
 	--disable-mex \
-	--datadir=%{_datadir}/%{name}-%{gmtversion}/share \
+	--datadir=%{_datadir}/%{name}-%{gmtversion}/share
 
 # mex need matlab # TODO add a --with matlab
 touch src/mex/.skip
 
-%make GMT_DEFAULT_PATH=%_datadir/gmt-%{gmtversion} CC_OPT="%optflags -fPIC" 
+make GMT_DEFAULT_PATH=%_datadir/gmt-%{gmtversion} CC_OPT="%optflags -fPIC" 
 
 %install
 %makeinstall install
