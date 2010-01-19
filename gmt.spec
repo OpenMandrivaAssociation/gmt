@@ -1,4 +1,4 @@
-%define release %mkrel 4
+%define release %mkrel 5
 %define major 4
 %define gmtversion 4.5.1
 
@@ -69,6 +69,7 @@ Group:		Development/Other
 Provides:	lib%{name}-devel = %gmtversion-%release
 Provides:	%name-devel = %gmtversion-%release
 Requires:	%libname = %gmtversion-%release
+Conflicts: 	%{_lib}gmt < 4.5.1-4
 
 %description
 GMT is a free, open source collection of ~60 UNIX tools that allow users to 
