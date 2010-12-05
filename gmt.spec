@@ -1,4 +1,4 @@
-%define release %mkrel 5
+%define release %mkrel 6
 %define major 4
 %define gmtversion 4.5.1
 
