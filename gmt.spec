@@ -1,4 +1,4 @@
-%define release %mkrel 6
+%define release %mkrel 7
 %define major 4
 %define gmtversion 4.5.1
 
@@ -28,7 +28,9 @@ Patch0:	gmt-4.5.1-as-needed.patch
 Patch1: gmt-4.2.0-overflow.patch
 URL: http://gmt.soest.hawaii.edu/
 BuildRequires: netcdf-devel >= 3.4
-BuildRequires: X11-devel
+BuildRequires: libx11-devel
+BuildRequires: libxaw-devel
+BuildRequires: libxt-devel
 Requires: gmt-coast = %dataevr
 
 %package        coast
@@ -135,10 +137,7 @@ This package contains development files from gmt.
 # needed by p0
 autoconf
 
-# workaround else if try to build mex, which need matlab
-
-%configure2_5x
-
+export CFLAGS="%optflags %ldflags"
 %configure2_5x \
 	--prefix=%_prefix \
 	--libdir=%_libdir \
@@ -153,6 +152,7 @@ touch src/mex/.skip
 make GMT_DEFAULT_PATH=%_datadir/gmt-%{gmtversion} CC_OPT="%optflags -fPIC" 
 
 %install
+rm -fr %buildroot
 %makeinstall install
 %makeinstall install-man
 %makeinstall suppldir=%buildroot%_datadir/gmt-%{gmtversion}/shareinstall-suppl
