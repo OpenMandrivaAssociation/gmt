@@ -1,15 +1,15 @@
-%define release %mkrel 7
+%define release %mkrel 1
 %define major 4
-%define gmtversion 4.5.1
+%define gmtversion 4.5.7
 
-%define dataversion 2.0.1
+%define dataversion 2.2.0
 %define dataepoch 1
 %define dataevr %{dataepoch}:%{dataversion}-%{release}
 
-%define requirever %gmtversion
+%define requirever %{gmtversion}
 
-%define libname %mklibname %name %{major}
-%define develname %mklibname %name -d
+%define libname %mklibname %{name} %{major}
+%define develname %mklibname %{name} -d
 
 Summary: Scientific graphic tool with maps
 Name: gmt
@@ -18,59 +18,58 @@ Release: %{release}
 License: GPL 
 Group: Sciences/Geosciences
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-Source0: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_src.tar.bz2
-Source2: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_suppl.tar.bz2
-Source7: ftp://gmt.soest.hawaii.edu/pub/gmt/GMT%{version}_share.tar.bz2
-Source8: ftp://gmt.soest.hawaii.edu/pub/gmt/GSHHS%{dataversion}_coast.tar.bz2
-Source9: ftp://gmt.soest.hawaii.edu/pub/gmt/GSHHS%{dataversion}_high.tar.bz2
-Source10: ftp://gmt.soest.hawaii.edu/pub/gmt/GSHHS%{dataversion}_full.tar.bz2
-Patch0:	gmt-4.5.1-as-needed.patch
+Source0: ftp://gmt.soest.hawaii.edu/pub/gmt/gmt-%{version}.tar.bz2
+Source1: ftp://gmt.soest.hawaii.edu/pub/gmt/gshhs-%{dataversion}.tar.bz2
 Patch1: gmt-4.2.0-overflow.patch
+Patch2: gmt-4.5.7-netcdf-flags.patch
 URL: http://gmt.soest.hawaii.edu/
 BuildRequires: netcdf-devel >= 3.4
 BuildRequires: libx11-devel
 BuildRequires: libxaw-devel
 BuildRequires: libxt-devel
-Requires: gmt-coast = %dataevr
+Requires: gmt-coast = %{dataevr}
 
 %package        coast
 Summary:        GMT cartography data crude, low and intermediate resolution
 Group:          Sciences/Geosciences
-Requires:       %{name} >= %requirever
+Requires:       %{name} >= %{requirever}
 Obsoletes:      gmt-data
 Version:        %{dataversion}
 Epoch:          %{dataepoch}
+BuildArch:	noarch
 
 %package 	highdata
 Summary:	GMT cartography data High-Resolution
 Group:		Sciences/Geosciences
-Requires: 	%{name} >= %requirever
+Requires: 	%{name} >= %{requirever}
 Version:        %{dataversion}
 Epoch:          %{dataepoch}
+BuildArch:	noarch
 
 %package 	fulldata
 Summary:	GMT cartography data Full-Resolution (maximum)
 Group:		Sciences/Geosciences
-Requires: 	%{name} >= %requirever
+Requires: 	%{name} >= %{requirever}
 Version:        %{dataversion}
 Epoch:          %{dataepoch}
+BuildArch:	noarch
 
 #%package        doc
 #Summary:        GMT HTML and PDF Documentation
 #Group:          Books/Other
 
-%package -n %libname
+%package -n %{libname}
 Summary:	Library from GMT
 Group:		System/Libraries
-Provides:	lib%name = %gmtversion-%release
+Provides:	lib%{name} = %{gmtversion}-%{release}
 Obsoletes:	%{_lib}%{name}
 
-%package -n %develname
+%package -n %{develname}
 Summary:	Library from GMT
 Group:		Development/Other
-Provides:	lib%{name}-devel = %gmtversion-%release
-Provides:	%name-devel = %gmtversion-%release
-Requires:	%libname = %gmtversion-%release
+Provides:	lib%{name}-devel = %{gmtversion}-%{release}
+Provides:	%{name}-devel = %{gmtversion}-%{release}
+Requires:	%{libname} = %{gmtversion}-%{release}
 Conflicts: 	%{_lib}gmt < 4.5.1-4
 
 %description
@@ -109,7 +108,7 @@ and political boundaries. This is maximum resolution data version
 #%description doc
 #HTML, PDF documentation and examples for GMT.
 
-%description -n %libname
+%description -n %{libname}
 GMT is a free, open source collection of mapping tools and cartography
 GMT supports 25 common map projections plus linear, log, and power scaling,
 and comes with support data such as coastlines, rivers, 
@@ -117,7 +116,7 @@ and political boundaries. This is High resolution data version.
 
 This package contains library from gmt.
 
-%description -n %develname
+%description -n %{develname}
 GMT is a free, open source collection of mapping tools and cartography
 GMT supports 25 common map projections plus linear, log, and power scaling,
 and comes with support data such as coastlines, rivers, 
@@ -126,9 +125,9 @@ and political boundaries. This is High resolution data version.
 This package contains development files from gmt.
 
 %prep
-%setup -q -n GMT%{gmtversion} -b 0 -b 2 -b 7 -a 8 -a 9 -a 10
-%patch0 -p0 -b .as-needed
+%setup -q -n GMT%{gmtversion} -b 0 -a 1
 %patch1 -p0 -b .overflow
+%patch2 -p0 -b .netcdf-flags
 
 %build
 # -fstack-protector make build failing
@@ -137,42 +136,41 @@ This package contains development files from gmt.
 # needed by p0
 autoconf
 
-export CFLAGS="%optflags %ldflags"
+export CFLAGS="%{optflags} %{ldflags}"
 %configure2_5x \
-	--prefix=%_prefix \
-	--libdir=%_libdir \
+	--prefix=%{_prefix} \
+	--libdir=%{_libdir} \
 	--enable-shared \
-	--enable-mansect=1 \
 	--disable-mex \
 	--datadir=%{_datadir}/%{name}-%{gmtversion}/share
 
 # mex need matlab # TODO add a --with matlab
 touch src/mex/.skip
 
-make GMT_DEFAULT_PATH=%_datadir/gmt-%{gmtversion} CC_OPT="%optflags -fPIC" 
+make GMT_DEFAULT_PATH=%{_datadir}/gmt-%{gmtversion} CC_OPT="%{optflags} -fPIC" 
 
 %install
 rm -fr %buildroot
 %makeinstall install
 %makeinstall install-man
-%makeinstall suppldir=%buildroot%_datadir/gmt-%{gmtversion}/shareinstall-suppl
-%makeinstall datadir=%buildroot%_datadir/gmt-%{gmtversion}/share install-data
+%makeinstall suppldir=%{buildroot}%{_datadir}/gmt-%{gmtversion}/shareinstall-suppl
+%makeinstall datadir=%{buildroot}%{_datadir}/gmt-%{gmtversion}/share install-data
 
-chmod 755 %buildroot%_libdir/*
+chmod 755 %{buildroot}%{_libdir}/*
 
-mkdir -p %buildroot/%_sysconfdir/profile.d/
-cat > %buildroot/%_sysconfdir/profile.d/%name.sh <<EOF
+mkdir -p %{buildroot}%{_sysconfdir}/profile.d/
+cat > %{buildroot}%{_sysconfdir}/profile.d/%{name}.sh <<EOF
 GMTHOME=%{_datadir}/gmt-%{gmtversion}
 export GMTHOME
 
 EOF
 
-cat > %buildroot/%_sysconfdir/profile.d/%name.csh <<EOF
+cat > %{buildroot}%{_sysconfdir}/profile.d/%{name}.csh <<EOF
 setenv GMTHOME %{_datadir}/gmt-%{gmtversion}
 
 EOF
 
-rm -fr %buildroot/usr/share/doc/gmt-doc
+rm -fr %{buildroot}%{_datadir}/doc/gmt-doc
 
 %if %mdkversion < 200900
 %post -n %libname -p /sbin/ldconfig
@@ -194,6 +192,8 @@ rm -fr %buildroot/usr/share/doc/gmt-doc
 %{_datadir}/gmt-%{gmtversion}/share/cpt/GMT_drywet.cpt
 %{_datadir}/gmt-%{gmtversion}/share/cpt/GMT_cool.cpt
 %{_datadir}/gmt-%{gmtversion}/share/cpt/GMT_copper.cpt
+%{_datadir}/gmt-%{gmtversion}/share/cpt/GMT_nighttime.cpt
+%{_datadir}/gmt-%{gmtversion}/share/cpt/GMT_paired.cpt
 %{_datadir}/gmt-%{gmtversion}/share/time/br.d
 %{_datadir}/gmt-%{gmtversion}/share/time/cn1.d
 %{_datadir}/gmt-%{gmtversion}/share/time/cn2.d
@@ -227,7 +227,6 @@ rm -fr %buildroot/usr/share/doc/gmt-doc
 %{_datadir}/gmt-%{gmtversion}/share/cpt/GMT_haxby.cpt
 %{_datadir}/gmt-%{gmtversion}/share/cpt/GMT_hot.cpt
 %{_datadir}/gmt-%{gmtversion}/share/cpt/GMT_jet.cpt
-#%{_datadir}/gmt-%{gmtversion}/share/gmtmedia.d
 %{_datadir}/gmt-%{gmtversion}/share/cpt/GMT_no_green.cpt
 %{_datadir}/gmt-%{gmtversion}/share/cpt/GMT_ocean.cpt
 %{_datadir}/gmt-%{gmtversion}/share/cpt/GMT_polar.cpt
@@ -405,11 +404,11 @@ rm -fr %buildroot/usr/share/doc/gmt-doc
 %{_datadir}/gmt-%{gmtversion}/share/coast/binned_GSHHS_f.cdf
 %{_datadir}/gmt-%{gmtversion}/share/coast/binned_river_f.cdf
 
-%files -n %libname
+%files -n %{libname}
 %defattr(-,root,root)
 %{_libdir}/*.so.%{major}
 
-%files -n %develname
+%files -n %{develname}
 %defattr(-,root,root)
 %{_libdir}/*.a
 %{_includedir}/*.h
@@ -417,5 +416,4 @@ rm -fr %buildroot/usr/share/doc/gmt-doc
 
 %clean
 [ %buildroot != '/' ] && rm -fr %buildroot
-
 
