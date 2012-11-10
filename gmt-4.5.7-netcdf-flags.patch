@@ -1,0 +1,13 @@
+Index: configure.ac
+===================================================================
+--- configure.ac
++++ configure.ac	2011-09-05 16:49:55.000000000 +0200
+@@ -544,7 +544,7 @@
+ 		AC_MSG_WARN([[No such directory: $NETCDF_LIB]])
+ 	fi
+ 	rpath="$NETCDF_LIB"
+-	NETCDF_LIB="-L$NETCDF_LIB -lnetcdf"
++	NETCDF_LIB="-L$NETCDF_LIB -lnetcdf -lhdf5_hl -lhdf5 -lz"
+ 	NETCDF_INC="-I$NETCDF_INC"
+ fi
+ dnl

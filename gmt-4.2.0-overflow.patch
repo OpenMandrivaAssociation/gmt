@@ -1,0 +1,13 @@
+Index: src/gmt_customio.c
+===================================================================
+--- src/gmt_customio.c
++++ src/gmt_customio.c	2007-06-27 20:45:44.000000000 +0200
+@@ -1307,7 +1307,7 @@
+  *-----------------------------------------------------------*/
+  
+ struct srf_header6 {	/* Surfer 6 file header structure */
+-	char id[4];		/* ASCII Binary identifier (DSBB) */
++	char id[5];		/* ASCII Binary identifier (DSBB) */
+ 	short int nx;		/* Number of columns */
+ 	short int ny;		/* Number of rows */
+ 	double x_min;		/* Minimum x coordinate */
