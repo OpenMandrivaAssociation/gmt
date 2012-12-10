@@ -1,0 +1,12 @@
+diff -urN GMT4.5.8/src/gmt_customio.c GMT4.5.8-patched/src/gmt_customio.c
+--- GMT4.5.8/src/gmt_customio.c	2012-01-14 05:28:16.000000000 +1100
++++ GMT4.5.8-patched/src/gmt_customio.c	2012-11-13 12:54:52.253672676 +1100
+@@ -1324,7 +1324,7 @@
+  *-----------------------------------------------------------*/
+  
+ struct srf_header6 {	/* Surfer 6 file header structure */
+-	char id[4];		/* ASCII Binary identifier (DSBB) */
++	char id[5];		/* ASCII Binary identifier (DSBB) */
+ 	unsigned short int nx;	/* Number of columns -- NOTE: original definition by GoldenSoft is "short int"*/
+ 	unsigned short int ny;	/* Number of rows */
+ 	double x_min;		/* Minimum x coordinate */
