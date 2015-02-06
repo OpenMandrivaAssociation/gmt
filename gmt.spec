@@ -13,7 +13,7 @@
 Summary:	Scientific graphic tool with maps
 Name:		gmt
 Version:	%{gmtversion}
-Release:	1
+Release:	2
 License:	GPL
 Group:		Sciences/Geosciences
 URL:		http://gmt.soest.hawaii.edu/
