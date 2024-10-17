@@ -16,7 +16,7 @@ Version:	%{gmtversion}
 Release:	2
 License:	GPL
 Group:		Sciences/Geosciences
-URL:		http://gmt.soest.hawaii.edu/
+URL:		https://gmt.soest.hawaii.edu/
 Source0:	ftp://gmt.soest.hawaii.edu/pub/gmt/gmt-%{version}.tar.bz2
 Source1:	ftp://gmt.soest.hawaii.edu/pub/gmt/gshhs-%{dataversion}.tar.bz2
 Patch1:		gmt-4.5.8-overflow.patch
